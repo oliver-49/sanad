@@ -10,31 +10,49 @@ class ApiService {
 
   static Future<String> processImage(String imagePath, String mode) async {
     try {
+      http.Response response;
       String url = baseUrl;
       url =
           url +
           (mode == "Currency"
               ? currencyUrl
               : (mode == "Object" ? objectUrl : textUrl));
+      if (mode == "Read Text") {
+        url = 'https://api.ocr.space/parse/image';
+        var request = http.MultipartRequest(
+          'POST',
+          Uri.parse('https://api.ocr.space/parse/image'),
+        );
 
-      // var request = http.MultipartRequest('POST', Uri.parse("https://mervin-superdelicate-incapably.ngrok-free.dev/detect-currency"));
-      // request.files.add(await http.MultipartFile.fromPath('files', imagePath));
-      // var response = await http.Response.fromStream(await request.send());
+        request.headers['apikey'] = 'K81007905988957';
 
-      // print("*****\n the response is     $response");
-      //       if (response.statusCode == 200) {
-      //         return json.decode(response.body)['result'];
-      //       }
-      //       return "خطأ في الاتصال بالخادم";
+        request.fields['language'] = 'auto';
+        request.fields['OCREngine'] = '2';
 
-      var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.files.add(
-        await http.MultipartFile.fromPath('file', '$imagePath'),
-      );
+        request.files.add(await http.MultipartFile.fromPath('file', imagePath));
 
-      http.StreamedResponse streamedResponse = await request.send();
+        http.StreamedResponse streamedResponse = await request.send();
+        response = await http.Response.fromStream(streamedResponse);
+      } else {
+        // var request = http.MultipartRequest('POST', Uri.parse("https://mervin-superdelicate-incapably.ngrok-free.dev/detect-currency"));
+        // request.files.add(await http.MultipartFile.fromPath('files', imagePath));
+        // var response = await http.Response.fromStream(await request.send());
 
-      http.Response response = await http.Response.fromStream(streamedResponse);
+        // print("*****\n the response is     $response");
+        //       if (response.statusCode == 200) {
+        //         return json.decode(response.body)['result'];
+        //       }
+        //       return "خطأ في الاتصال بالخادم";
+
+        var request = http.MultipartRequest('POST', Uri.parse(url));
+        request.files.add(
+          await http.MultipartFile.fromPath('file', '$imagePath'),
+        );
+
+        http.StreamedResponse streamedResponse = await request.send();
+
+        response = await http.Response.fromStream(streamedResponse);
+      }
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -60,76 +78,74 @@ class ApiService {
             }
           case "Object":
             {
-              List objects = data['objects'] ?? [];
+              print("objects detection ${data['description_ar']}");
 
-              print("objects $objects");
+              String objects =
+                  data['description_ar'] ?? 'لا يمكن التحديد , حاول مرة ثانية';
+
+              // print("objects $objects");
 
               // if (objects.isNotEmpty) {
               //   imageResponse = objects[0]['label_ar'];
               //   print(imageResponse);
               // }
-              if (objects.isNotEmpty) {
-                List<String> labels = [];
+              // if (objects.isNotEmpty) {
+              //   List<String> labels = [];
 
-                for (var obj in objects) {
-                  if (obj['label_ar'] != null) {
-                    labels.add(obj['label_ar']);
-                  }
-                }
+              //   for (var obj in objects) {
+              //     if (obj['label_ar'] != null) {
+              //       labels.add(obj['label_ar']);
+              //     }
+              //   }
 
-                imageResponse = labels.join(" ، ");
-                print(imageResponse);
-              }
+              imageResponse = objects;
+              // labels.join(" ، ");
+              print(imageResponse);
+              // }
               break;
             }
 
           case "Read Text":
             {
-              // String Text = data['text'] ?? '';
+              // print(" Starting reading");
 
-              // print("Text $Text");
+              // var request = http.MultipartRequest(
+              //   'POST',
+              //   Uri.parse('https://api.ocr.space/parse/image'),
+              // );
 
-              // if (Text.isNotEmpty) {
-              //   imageResponse = Text;
-              //   print(imageResponse);
-              // }
+              // request.headers['apikey'] = 'K81007905988957';
 
-              var request = http.MultipartRequest(
-                'POST',
-                Uri.parse('https://api.ocr.space/parse/image'),
-              );
+              // request.fields['language'] = 'auto';
+              // request.fields['OCREngine'] = '2';
 
-              request.headers['apikey'] = 'K81007905988957';
+              // request.files.add(
+              //   await http.MultipartFile.fromPath('file', imagePath),
+              // );
 
-              request.fields['language'] = 'auto';
-              request.fields['OCREngine'] = '2';
+              // http.StreamedResponse streamedResponse = await request.send();
+              // http.Response response = await http.Response.fromStream(
+              //   streamedResponse,
+              // );
+              // print("OCR API RESPONSE: ${response.body}");
 
-              request.files.add(
-                await http.MultipartFile.fromPath('file', imagePath),
-              );
+              // if (response.statusCode == 200) {
+              final result = data;
 
-              http.StreamedResponse streamedResponse = await request.send();
-              http.Response response = await http.Response.fromStream(
-                streamedResponse,
-              );
+              print("OCR RESULT: $result");
 
-              if (response.statusCode == 200) {
-                final result = json.decode(response.body);
+              if (result['ParsedResults'] != null &&
+                  result['ParsedResults'].isNotEmpty) {
+                String extractedText =
+                    result['ParsedResults'][0]['ParsedText'] ?? '';
 
-                print("OCR RESULT: $result");
-
-                if (result['ParsedResults'] != null &&
-                    result['ParsedResults'].isNotEmpty) {
-                  String extractedText =
-                      result['ParsedResults'][0]['ParsedText'] ?? '';
-
-                  if (extractedText.isNotEmpty) {
-                    imageResponse = extractedText;
-                  }
+                if (extractedText.isNotEmpty) {
+                  imageResponse = extractedText;
                 }
-              } else {
-                print(response.reasonPhrase);
               }
+              // } else {
+              //   print(response.reasonPhrase);
+              // }
 
               break;
             }

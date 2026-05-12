@@ -199,12 +199,11 @@ class _VisionPageState extends State<VisionPage> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white,
-                      const Color(0xFFF5F5F5),
-                    ],
+                    colors: [Colors.white, const Color(0xFFF5F5F5)],
                   ),
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(50)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(50),
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.2),
@@ -231,15 +230,18 @@ class _VisionPageState extends State<VisionPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Text(
                         _resultText,
-                        maxLines: widget.mode != "Read Text" ? 3 : 2,
+                        maxLines: 1,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
+
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF1A237E),
                           letterSpacing: 0.5,
                           height: 1.3,
+
+                          //maxLines 2
                         ),
                       ),
                     ),
@@ -262,7 +264,9 @@ class _VisionPageState extends State<VisionPage> {
                                   color: const Color(0xFF1A237E),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color(0xFF1A237E).withOpacity(0.3),
+                                      color: const Color(
+                                        0xFF1A237E,
+                                      ).withOpacity(0.3),
                                       blurRadius: 15,
                                       spreadRadius: _isLoading ? 5 : 2,
                                     ),
