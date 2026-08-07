@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:text_to_or_from_speech_app/helper.dart/services/text_to_speach.dart';
 import 'presentation/screens/splash_screen.dart';
-import 'helper.dart/services/inreview/tts_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

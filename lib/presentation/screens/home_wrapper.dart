@@ -32,7 +32,7 @@ class _HomeWrapperState extends State<HomeWrapper> {
     "وضع العملات",
     "وضع الأجسام",
     "وضع قراءة النصوص",
-    "وضع المساعدة",
+    // "وضع المساعدة",
   ];
   void initState() {
     super.initState();
@@ -97,7 +97,7 @@ class _HomeWrapperState extends State<HomeWrapper> {
               mode: "Read Text",
               title: "Read Text Mode",
             ),
-            HelpPage(onSelect: _onItemTapped),
+            // HelpPage(onSelect: _onItemTapped),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -106,7 +106,7 @@ class _HomeWrapperState extends State<HomeWrapper> {
           selectedItemColor: const Color(0xFF1A237E),
           unselectedItemColor: Colors.grey,
           type: BottomNavigationBarType.fixed,
-          iconSize: 45, // Increased icon size for accessibility
+          iconSize: 25, // Increased icon size for accessibility
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.money), label: 'Currency'),
@@ -118,10 +118,10 @@ class _HomeWrapperState extends State<HomeWrapper> {
               icon: Icon(Icons.text_fields),
               label: 'Text',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.support_agent_rounded),
-              label: 'Help',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.support_agent_rounded),
+            //   label: 'Help',
+            // ),
           ],
         ),
       ),

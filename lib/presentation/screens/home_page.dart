@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _startListening() async {
     TextToSpeach.speak("أنا مستعد للاستماع");
-    await Future.delayed(const Duration(seconds: 2), () {});
+    await Future.delayed(const Duration(seconds: 3), () {});
     await TextToSpeach.stop();
 
     bool available = await _speech.initialize(
@@ -111,16 +111,18 @@ class _HomePageState extends State<HomePage> {
         text.contains("ثلاثة") ||
         text.contains("ثلاثه")) {
       _goTo(3);
-    } else if (text.contains("4") ||
-        text.contains("٤") ||
-        text.contains("مساعدة") ||
-        text.contains("مساعده") ||
-        text.contains("خمسة") ||
-        text.contains("خمسه")) {
-      _goTo(4);
-    } else {
+    }
+    //  else if (text.contains("4") ||
+    //     text.contains("٤") ||
+    //     text.contains("مساعدة") ||
+    //     text.contains("مساعده") ||
+    //     text.contains("خمسة") ||
+    //     text.contains("خمسه")) {
+    //   _goTo(4);
+    // }
+    else {
       TextToSpeach.speak(
-        "لم أفهم، قول: تعرف على العملة، أو اقرأ النص، أو وصف الشيء، أو مساعدة",
+        "لم أفهم، قول: تعرف على العملة، أو اقرأ النص، أو وصف الشيء، ",
         isImportant: true,
       );
       Future.delayed(const Duration(seconds: 4), () {
@@ -138,7 +140,7 @@ class _HomePageState extends State<HomePage> {
     // _welcomeSpokenGlobal = true;
     await TextToSpeach.speak('''
       أهلاً بك في سند، أنا عينك اللي بتشوف بالصوت، مع بعض نخلي الدنيا أحلى.
-       قل واحد للعملات، اثنان للأجسام، ثلاثة للنصوص، أو أربعة للمساعدة.
+       قل واحد للعملات، اثنان للأجسام، ثلاثة للنصوص، .
        ولتشغيل الميكروفون، اضغط مطولاً على الشاشة.
         ولتغيير وضع الصوت بين كامل و مهم فقط،  اضغط مرتين على الشاشة.
       ''');
@@ -223,7 +225,6 @@ class _HomePageState extends State<HomePage> {
     widget.onSelect(index);
   }
 
-
   void toggleVoiceMode() async {
     if (TextToSpeach.currentMode == VoiceMode.full) {
       TextToSpeach.currentMode = VoiceMode.important;
@@ -294,14 +295,14 @@ class _HomePageState extends State<HomePage> {
                   const Color(0xFFFFF3E0),
                   const Color(0xFFF57C00),
                 ),
-                _buildCard(
-                  "Help Mode",
-                  Icons.support_agent_rounded,
-                  4,
-                  const Color(0xFFFFEBEE),
-                  const Color(0xFFD32F2F),
-                ),
 
+                // _buildCard(
+                //   "Help Mode",
+                //   Icons.support_agent_rounded,
+                //   4,
+                //   const Color(0xFFFFEBEE),
+                //   const Color(0xFFD32F2F),
+                // ),
                 const SizedBox(height: 40),
 
                 GestureDetector(
@@ -326,14 +327,16 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.red.withOpacity(0.3),
                                       blurRadius: 25,
                                       spreadRadius: 8,
-                                    )
+                                    ),
                                   ]
                                 : [],
                           ),
                           child: Icon(
                             _isListening ? Icons.mic : Icons.mic_none,
-                            size: 85,
-                            color: _isListening ? Colors.red : const Color(0xFF1A237E),
+                            size: 35,
+                            color: _isListening
+                                ? Colors.red
+                                : const Color(0xFF1A237E),
                           ),
                         ),
                       );
@@ -349,7 +352,7 @@ class _HomePageState extends State<HomePage> {
                       : "Long press to start listening",
                   style: TextStyle(
                     color: _isListening ? Colors.red : Colors.grey[700],
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -365,7 +368,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCard(String title, IconData icon, int index, Color bgColor, Color accentColor) {
+  Widget _buildCard(
+    String title,
+    IconData icon,
+    int index,
+    Color bgColor,
+    Color accentColor,
+  ) {
     return GestureDetector(
       onTap: () => _goTo(index),
       child: Container(
@@ -397,9 +406,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              child: Icon(icon, color: accentColor, size: 45),
+              child: Icon(icon, color: accentColor, size: 25),
             ),
-            const SizedBox(width: 25),
+            const SizedBox(width: 15),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,7 +416,7 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: accentColor.withOpacity(0.9),
                     ),
@@ -415,7 +424,7 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     "Tap to enter",
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       color: accentColor.withOpacity(0.5),
                       fontWeight: FontWeight.w500,
                     ),
@@ -423,7 +432,11 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios_rounded, color: accentColor.withOpacity(0.3), size: 20),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: accentColor.withOpacity(0.3),
+              size: 20,
+            ),
           ],
         ),
       ),
